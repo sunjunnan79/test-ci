@@ -42,17 +42,17 @@ jobs:
         ports:
           - '9092:9092'
         env:
-          - KAFKA_KRAFT_MODE=true  # 启用 KRaft 模式
-          - KAFKA_LISTENER_SECURITY_PROTOCOL=PLAINTEXT
-          - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
-          - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
-          - KAFKA_LISTENER_PORT=9092
-          - KAFKA_BROKER_ID=1
-          - KAFKA_LOG_DIRS=/var/lib/kafka/data
-          - KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE=false
-          - KAFKA_LOG_RETENTION_HOURS=168
-          - KAFKA_CREATE_TOPICS=foo:1:1,bar:3:3
-          - TZ=Asia/Shanghai
+          KAFKA_KRAFT_MODE: true
+          KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+          KAFKA_LISTENER_PORT: 9092
+          KAFKA_BROKER_ID: 1
+          KAFKA_LOG_DIRS: /var/lib/kafka/data
+          KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: false
+          KAFKA_LOG_RETENTION_HOURS: 168
+          KAFKA_CREATE_TOPICS: foo:1:1,bar:3:3
+          TZ: Asia/Shanghai
         volumes:
           - kafka-data:/var/lib/kafka/data
         options: >-
