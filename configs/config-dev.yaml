@@ -1,8 +1,8 @@
 mysql:
   host: "172.17.0.1"
   port: "3306"
-  user: "user"
-  password: "password"
+  user: "root"
+  password: "testci"
   dbname: "testdb"
 redis:
   host: "172.17.0.1"
