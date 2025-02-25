@@ -42,19 +42,19 @@ jobs:
         ports:
           - '9092:9092'
         env:
-          KAFKA_KRAFT_MODE: "true"       # 启用 KRaft 模式
-          KAFKA_LISTENER_SECURITY_PROTOCOL: "PLAINTEXT"
-          KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
-          KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092"
-          KAFKA_LISTENER_PORT: "9092"
-          KAFKA_BROKER_ID: "1"           # 设置 Broker ID
-          KAFKA_LOG_DIRS: "/var/lib/kafka/data"
-          KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: "false"  # 禁用 Confluent 的指标收集（如果不需要）
-          KAFKA_LOG_RETENTION_HOURS: "168"  # 设置日志保留时间，单位为小时（默认7天）
-          KAFKA_CREATE_TOPICS: "foo:1:1,bar:3:3"  # 启动时自动创建主题 foo（1分区）和 bar（3分区）
-          TZ: "Asia/Shanghai"
+          - KAFKA_KRAFT_MODE=true  # 启用 KRaft 模式
+          - KAFKA_LISTENER_SECURITY_PROTOCOL=PLAINTEXT
+          - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+          - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+          - KAFKA_LISTENER_PORT=9092
+          - KAFKA_BROKER_ID=1
+          - KAFKA_LOG_DIRS=/var/lib/kafka/data
+          - KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE=false
+          - KAFKA_LOG_RETENTION_HOURS=168
+          - KAFKA_CREATE_TOPICS=foo:1:1,bar:3:3
+          - TZ=Asia/Shanghai
         volumes:
-          - kafka-data:/var/lib/kafka/data  # 持久化 Kafka 数据
+          - kafka-data:/var/lib/kafka/data
         options: >-
           --health-cmd="nc -zv localhost 9092"
           --health-interval=10s
