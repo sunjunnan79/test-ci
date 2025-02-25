@@ -38,28 +38,16 @@ jobs:
           --health-retries=3
 
       kafka:
-        image: bitnami/kafka:3.6.1
+        image: bitnami/kafka:3.6.0
         ports:
-          - '9092:9092'
-        env:
-          KAFKA_KRAFT_MODE: true
-          KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-          KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-          KAFKA_LISTENER_PORT: 9092
-          KAFKA_BROKER_ID: 1
-          KAFKA_LOG_DIRS: /var/lib/kafka/data
-          KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: false
-          KAFKA_LOG_RETENTION_HOURS: 168
-          KAFKA_CREATE_TOPICS: foo:1:1,bar:3:3
-          TZ: Asia/Shanghai
-        volumes:
-          - kafka-data:/var/lib/kafka/data
+          - "9092:9092"
+          - "9094:9094"
         options: >-
-          --health-cmd="nc -zv localhost 9092"
+          --health-cmd="nc -zv kafka 9092"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
+        # Kafka's environment variables are already defined in the docker-compose.yml file, no need to repeat them here
 
     steps:
       - name: Checkout code

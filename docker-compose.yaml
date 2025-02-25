@@ -30,20 +30,19 @@ services:
       - '6379:6379'
 
   kafka:
-    image: bitnami/kafka:3.6.1
-    environment:
-      - KAFKA_KRAFT_MODE=true       # 启用 KRaft 模式
-      - KAFKA_LISTENER_SECURITY_PROTOCOL=PLAINTEXT
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
-      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
-      - KAFKA_LISTENER_PORT=9092
-      - KAFKA_BROKER_ID=1           # 设置 Broker ID
-      - KAFKA_LOG_DIRS=/var/lib/kafka/data
-      - KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE=false  # 禁用 Confluent 的指标收集（如果不需要）
-      - KAFKA_LOG_RETENTION_HOURS=168  # 设置日志保留时间，单位为小时（默认7天）
-      - KAFKA_CREATE_TOPICS=foo:1:1,bar:3:3  # 启动时自动创建主题 foo（1分区）和 bar（3分区）
-      - TZ=Asia/Shanghai
+    image: 'bitnami/kafka:3.6.0'
+    restart: always
     ports:
-      - "9092:9092"
-    volumes:
-      - kafka-data:/var/lib/kafka/data  # 持久化 Kafka 数据
+      - '9092:9092'
+      - '9094:9094'
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CREATE_TOPICS=webook_binlog:3:1
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://:9093,EXTERNAL://0.0.0.0:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - TZ=Asia/Shanghai
