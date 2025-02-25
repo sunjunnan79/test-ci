@@ -6,8 +6,9 @@ import (
 	"github.com/IBM/sarama"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
-	"github.com/jinzhu/gorm"
 	"gopkg.in/yaml.v2"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
@@ -66,9 +67,9 @@ func InitConfig() *Config {
 	// 设置配置文件路径，根据环境切换
 	var configFilePath string
 	if os.Getenv("ENV") == "production" {
-		configFilePath = "config.yaml" // 正式环境
+		configFilePath = "configs/config.yaml" // 正式环境
 	} else {
-		configFilePath = "config-dev.yaml" // 测试环境
+		configFilePath = "configs/config-dev.yaml" // 测试环境
 	}
 
 	// 加载配置文件
@@ -87,11 +88,10 @@ func setupRouter(config *Config) *gin.Engine {
 	// 连接 MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		config.MySQL.User, config.MySQL.Password, config.MySQL.Host, config.MySQL.Port, config.MySQL.DBName)
-	db, err := gorm.Open("mysql", dsn)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{}) // 更新为 GORM 2.x 的方式
 	if err != nil {
 		log.Fatal("Failed to connect to MySQL:", err)
 	}
-	defer db.Close()
 
 	// 自动迁移
 	db.AutoMigrate(&User{})
