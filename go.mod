@@ -1,6 +1,6 @@
 module test-ci
 
-go 1.23.3
+go 1.23
 
 require (
 	github.com/IBM/sarama v1.45.0
