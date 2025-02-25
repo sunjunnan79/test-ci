@@ -54,13 +54,6 @@ jobs:
           KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
           KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
           TZ: Asia/Shanghai
-        options: >-
-          --health-cmd="kafka-topics --bootstrap-server kafka:9092 --list || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-        # Kafka's environment variables are already defined in the docker-compose.yml file, no need to repeat them here
 
     steps:
       - name: Checkout code
