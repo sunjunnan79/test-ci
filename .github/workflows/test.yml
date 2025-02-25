@@ -76,7 +76,7 @@ jobs:
       - name: Start Docker Compose
         run: |
           docker-compose -f docker-compose.yml up -d
-          sleep 30 # 等待容器启动
+          sleep 120 # 等待容器启动
 
       - name: Run tests
         run: |
