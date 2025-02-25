@@ -1,0 +1,86 @@
+name: Go Test with Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql8:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: testci
+        options: >-
+          --health-cmd="mysqladmin ping -u root -ptestci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      redis:
+        image: bitnami/redis:7.2
+        ports:
+          - 6379:6379
+        env:
+          REDIS_PASSWORD: testci
+        options: >-
+          --health-cmd="redis-cli -h localhost -a testci ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      kafka:
+        image: bitnami/kafka:3.6.0
+        ports:
+          - 9092:9092
+          - 9094:9094
+        env:
+          KAFKA_CFG_NODE_ID: 0
+          KAFKA_CREATE_TOPICS: webook_binlog:3:1
+          KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+          KAFKA_CFG_PROCESS_ROLES: controller,broker
+          KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://:9093,EXTERNAL://0.0.0.0:9094
+          KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+          KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+          KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+          KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+        options: >-
+          --health-cmd="nc -zv kafka 9092"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Install dependencies
+        run: |
+          go mod tidy
+          go mod download
+
+      - name: Start Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d
+          sleep 30 # 等待容器启动
+
+      - name: Run tests
+        run: |
+          go test -v ./...
+
+      - name: Shut down Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml down

@@ -1,0 +1,13 @@
+mysql:
+  host: "localhost"
+  port: "3306"
+  user: "user"
+  password: "password"
+  dbname: "testdb"
+redis:
+  host: "localhost"
+  port: "6379"
+  password: "testci"
+kafka:
+  brokers:
+    - "localhost:9092"

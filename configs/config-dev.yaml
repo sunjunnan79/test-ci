@@ -1,0 +1,13 @@
+mysql:
+  host: "172.17.0.1"
+  port: "3306"
+  user: "user"
+  password: "password"
+  dbname: "testdb"
+redis:
+  host: "172.17.0.1"
+  port: "6379"
+  password: "testci"
+kafka:
+  brokers:
+    - "172.17.0.1:9092"
