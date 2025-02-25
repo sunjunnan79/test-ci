@@ -76,7 +76,7 @@ jobs:
 
       - name: Start Docker Compose
         run: |
-          docker-compose -f docker-compose.yml up -d
+          docker-compose -f docker-compose.yaml up -d
           sleep 120 # 等待容器启动 2分钟
 
       - name: Run tests
@@ -85,4 +85,4 @@ jobs:
 
       - name: Shut down Docker Compose
         run: |
-          docker-compose -f docker-compose.yml down
+          docker-compose -f docker-compose.yaml down
