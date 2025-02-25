@@ -2,6 +2,8 @@ module test-ci
 
 go 1.23
 
+toolchain go1.23.3
+
 require (
 	github.com/IBM/sarama v1.45.0
 	github.com/gin-gonic/gin v1.10.0
