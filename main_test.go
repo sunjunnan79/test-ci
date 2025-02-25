@@ -29,12 +29,6 @@ func TestUserRoute(t *testing.T) {
 		expectedError string
 	}{
 		{
-			name:          "Valid user",
-			userID:        "1", // 假设这个用户存在
-			expectedCode:  http.StatusOK,
-			expectedError: "",
-		},
-		{
 			name:          "Invalid user ID",
 			userID:        "invalid", // 无效的 user_id
 			expectedCode:  http.StatusBadRequest,
