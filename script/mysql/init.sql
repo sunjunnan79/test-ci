@@ -1,1 +1,1 @@
-create databse testdb;
+CREATE DATABASE IF NOT EXISTS testdb;
