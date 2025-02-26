@@ -102,7 +102,8 @@ jobs:
         with:
           username: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
           password: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-          registry: crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com
+          registry: registry.cn-hongkong.aliyuncs.com
+          region-id: cn-hongkong # 务必正确填写镜像容器服务的登录地址
 
       # 设置 Docker 登录
       - name: Log in to Docker Hub
