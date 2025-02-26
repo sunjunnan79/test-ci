@@ -6,7 +6,7 @@ build:
 	@echo "构建服务：镜像标签：$(TAG)"
 	docker buildx build \
 		--platform linux/amd64 \
-		-t crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:$(TAG) \
+		-t sunjunnan112/test-ci:$(TAG) \
 		--build-arg GOOS=linux \
 		--build-arg GOARCH=amd64 \
 		--no-cache \
@@ -20,10 +20,10 @@ build:
 
 # 推送镜像目标
 push:
-	@echo "推送镜像：crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:$(TAG)"
-	docker push crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:$(TAG)
+	@echo "推送镜像：sunjunnan112/test-ci:$(TAG)"
+	docker push sunjunnan112/test-ci:$(TAG)
 
 pushLatest:
 	@echo "推送$(TAG)版本镜像为latest"
-	docker tag crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:$(TAG) crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:latest
-	docker push crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:latest
+	docker tag sunjunnan112/test-ci:$(TAG) sunjunnan112/test-ci:latest
+	docker push sunjunnan112/test-ci:latest

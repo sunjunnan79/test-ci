@@ -103,29 +103,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 构建镜像
-      - name: Build docker image
-        if: env.should_deploy == 'true'
-        run: |
-          TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 获取最新标签（如果没有标签，会为空）
-          echo "构建并推送镜像：$(TAG)"
-
-          # 构建镜像
-          make build TAG=${TAG}
-
-      # 登录到阿里云 Docker 注册表
-      - name: Log in to Alibaba Cloud Docker Registry
-        if: env.should_deploy == 'true'
-        run: |
-          sudo docker login --username=${{ secrets.ALIYUN_DOCKER_USERNAME }} crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com -p ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-
-      # 推送docker镜像
+      # 构建并推送docker镜像
       - name: Push docker image
         if: env.should_deploy == 'true'
         run: |
           TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 获取最新标签（如果没有标签，会为空）
           echo "构建并推送镜像：$(TAG)"
-          sudo docker login --username=${{ secrets.ALIYUN_DOCKER_USERNAME }} crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com -p ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
+          # 构建镜像
+          make build TAG=${TAG}
           # 推送镜像
           make push TAG=${TAG}
 
