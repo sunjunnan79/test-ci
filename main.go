@@ -74,7 +74,6 @@ func InitConfig() *Config {
 	// 加载配置文件
 	config, err := loadConfig(configFilePath)
 	if err != nil {
-		fmt.Println("123456")
 		log.Fatal("Failed to load config:", err)
 	}
 	return config
