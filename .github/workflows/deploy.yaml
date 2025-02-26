@@ -19,7 +19,7 @@ jobs:
           # 检查是否有标签
           TAGS=$(git tag)
           # 存储全局的 TAG
-          echo "deploy_tag=TAGS" >> $GITHUB_ENV
+          echo "deploy_tag=$TAGS" >> $GITHUB_ENV
           
           # 通过比较git进行推送
           if [ -z "$TAGS" ]; then
