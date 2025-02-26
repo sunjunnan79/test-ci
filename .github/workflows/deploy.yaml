@@ -71,7 +71,7 @@ jobs:
 
       # 推送 `latest` 标签的镜像（只有当前标签 >= 最新标签时才执行推送）
       - name: Push latest Docker image
-        if: env.should_deploy == 'true' && env.deploy_latest == 'true' && github.ref == 'refs/heads/main'
+        if: env.should_deploy == 'true' && env.deploy_latest == 'true'
         run: |
           # 只有最新标签时才推送 `latest`
           echo "推送镜像：latest"
