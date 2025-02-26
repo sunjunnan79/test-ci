@@ -102,7 +102,7 @@ jobs:
         with:
           username: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
           password: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-          registry: registry.cn-hongkong.aliyuncs.com
+          registry: crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com
 
       # 设置 Docker 登录
       - name: Log in to Docker Hub
