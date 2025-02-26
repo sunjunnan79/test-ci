@@ -13,6 +13,7 @@ on:
 
 jobs:
   test:
+    if: github.ref == 'refs/heads/main' #仅在推送的时候才会触发CD
     runs-on: ubuntu-latest
     steps:
       # 检查代码版本
@@ -98,12 +99,8 @@ jobs:
       # 登录到阿里云 Docker 注册表
       - name: Log in to Alibaba Cloud Docker Registry
         if: env.should_deploy == 'true'
-        uses: aliyun/acr-login@v1
-        with:
-          username: ${{ secrets.ALIYUN_DOCKER_USERNAME }}
-          password: ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
-          registry: registry.cn-hongkong.aliyuncs.com
-          region-id: cn-hongkong # 务必正确填写镜像容器服务的登录地址
+        run: |
+          sudo docker login --username=${{ secrets.ALIYUN_DOCKER_USERNAME }} crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com -p ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
 
       # 设置 Docker 登录
       - name: Log in to Docker Hub
