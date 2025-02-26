@@ -75,18 +75,20 @@ jobs:
       - name: Get latest Git tag
         id: get_tag
         run: |
-          # 尝试获取当前 Git 标签
-          CURRENT_TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 如果没有标签，不报错
-          if [ -z "$CURRENT_TAG" ]; then
-            echo "No version tag found, skipping deployment."
-            echo "should_deploy=false" >> $GITHUB_ENV  # 设置 should_deploy=false，跳过后续步骤
+          # 检查是否有标签
+          TAGS=$(git tag)
+          if [ -z "$TAGS" ]; then
+            echo "No tags found, skipping deployment."
+            echo "should_deploy=false" >> $GITHUB_ENV
           else
+            # 获取当前 Git 标签（通过 git tag 获取最新标签）
+            CURRENT_TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 如果没有标签，避免报错
             echo "Current tag: $CURRENT_TAG"
-          
-            # 获取最新 Git 标签（通过比较 Git 标签）
+            
+            # 获取最新 Git 标签
             LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
             echo "Latest tag: $LATEST_TAG"
-          
+            
             # 判断当前标签是否 >= 最新标签
             if [[ "$CURRENT_TAG" == "$LATEST_TAG" || "$(echo -e "$LATEST_TAG\n$CURRENT_TAG" | sort -V | head -n 1)" == "$LATEST_TAG" ]]; then
               echo "deploy_latest=true" >> $GITHUB_ENV
@@ -95,6 +97,7 @@ jobs:
             fi
             echo "should_deploy=true" >> $GITHUB_ENV  # 如果存在标签，继续部署
           fi
+
       
 
       # 判断是否需要推送镜像
