@@ -46,7 +46,6 @@ func loadConfig(filePath string) (*Config, error) {
 		return nil, err
 	}
 	defer file.Close()
-
 	// 解析配置文件
 	var config Config
 	decoder := yaml.NewDecoder(file)

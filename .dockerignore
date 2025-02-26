@@ -1,0 +1,6 @@
+./.idea
+./.github
+./script
+./configs/config-dev.yaml
+./configs/config.yaml
+*_test.go
