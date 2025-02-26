@@ -1,3 +1,5 @@
+# 当前仅针对main分支
+# 自动测试,目前测试内容包括: 编译,test文件
 name: test with docker-compose
 
 on:

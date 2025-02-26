@@ -1,3 +1,9 @@
+# 当且仅当打tag会尝试去打包
+# 如果tag是最新的版本就会尝试去构建latest版本的镜像
+# 前置条件:
+#    1. makefile
+#    2. github-action环境配置: DOCKER_USERNAME,DOCKER_PASSWORD
+
 name: Deploy with Docker
 
 on:
@@ -79,3 +85,18 @@ jobs:
           # 只有最新标签时才推送 `latest`
           echo "推送镜像：latest"
           make pushLatest TAG=${{env.deploy_tag}}
+
+      # SSH 部署和执行 Shell 脚本
+      - name: Deploy with SSH and Shell Script
+        if: env.should_deploy == 'true' && env.deploy_latest == 'true'
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.SSH_HOST }}  # 你的目标服务器地址
+          username: ${{ secrets.SSH_USER }}  # 你的目标服务器用户名
+          key: ${{ secrets.SSH_PRIVATE_KEY }}  # 你的 SSH 私钥（GitHub Secrets）
+          port: 22  # 目标服务器的 SSH 端口，默认是 22
+          script: |
+            # 移动到指定目录并执行 deploy.sh 文件
+            cd /root/cicd/ || exit 1  # 确保进入目录失败时退出
+            echo "执行 deploy.sh 脚本..."
+            bash deploy.sh  # 执行脚本
