@@ -1,20 +1,16 @@
-name: Go Test with Dockerfile Compose
+name: test with docker-compose
 
 on:
   push:
     branches:
       - main
-    tags:
-      - '*'
   pull_request:
     branches:
       - main
 
-
 jobs:
   test:
-    if: github.ref == 'refs/heads/main' #仅在推送的时候才会触发CD
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       # 检查代码版本
       - name: Checkout code
@@ -49,75 +45,3 @@ jobs:
       - name: Shut down Dockerfile Compose
         run: |
           docker-compose -f docker-compose.yaml down
-
-  deploy:
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') #仅在打tag的时候才会触发CD
-    steps:
-      # 检查代码版本
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Get latest Git tag
-        id: get_tag
-        run: |
-          # 检查是否有标签
-          TAGS=$(git tag)
-          if [ -z "$TAGS" ]; then
-            echo "No tags found, skipping deployment."
-            echo "should_deploy=false" >> $GITHUB_ENV
-          else
-            # 获取当前 Git 标签（通过 git tag 获取最新标签）
-            CURRENT_TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 如果没有标签，避免报错
-            echo "Current tag: $CURRENT_TAG"
-
-            # 获取最新 Git 标签
-            LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
-            echo "Latest tag: $LATEST_TAG"
-
-            # 判断当前标签是否 >= 最新标签
-            if [[ "$CURRENT_TAG" == "$LATEST_TAG" || "$(echo -e "$LATEST_TAG\n$CURRENT_TAG" | sort -V | head -n 1)" == "$LATEST_TAG" ]]; then
-              echo "deploy_latest=true" >> $GITHUB_ENV
-            else
-              echo "deploy_latest=false" >> $GITHUB_ENV
-            fi
-            echo "should_deploy=true" >> $GITHUB_ENV  # 如果存在标签，继续部署
-          fi
-
-
-      # 设置 Docker 环境
-      - name: Set up Docker
-        if: env.should_deploy == 'true'
-        run: |
-          sudo curl -fsSL https://get.docker.com | sh
-          sudo usermod -aG docker $USER
-          sudo systemctl enable docker
-          sudo systemctl start docker
-          docker --version
-
-      # 设置 Docker 登录
-      - name: Log in to Docker Hub
-        if: env.should_deploy == 'true'
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # 构建并推送docker镜像
-      - name: Push docker image
-        if: env.should_deploy == 'true'
-        run: |
-          TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 获取最新标签（如果没有标签，会为空）
-          echo "构建并推送镜像：$(TAG)"
-          # 构建镜像
-          make build TAG=${TAG}
-          # 推送镜像
-          make push TAG=${TAG}
-
-      # 推送 `latest` 标签的镜像（只有当前标签 >= 最新标签时才执行推送）
-      - name: Push latest Docker image
-        if: env.should_deploy == 'true' && env.deploy_latest == 'true' && github.ref == 'refs/heads/main'
-        run: |
-          # 只有最新标签时才推送 `latest`
-          echo "推送镜像：latest"
-          make pushLatest TAG=${TAG}

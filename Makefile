@@ -1,12 +1,15 @@
 # 默认镜像标签
 TAG ?= latest
+# 镜像的完整路径
+REPO_PATH = sunjunnan112/test-ci
+
 
 # 构建目标
 build:
 	@echo "构建服务：镜像标签：$(TAG)"
 	docker buildx build \
 		--platform linux/amd64 \
-		-t sunjunnan112/test-ci:$(TAG) \
+		-t $(REPO_PATH):$(TAG) \
 		--build-arg GOOS=linux \
 		--build-arg GOARCH=amd64 \
 		--no-cache \
@@ -20,10 +23,10 @@ build:
 
 # 推送镜像目标
 push:
-	@echo "推送镜像：sunjunnan112/test-ci:$(TAG)"
-	docker push sunjunnan112/test-ci:$(TAG)
+	@echo "推送镜像：$(REPO_PATH):$(TAG)"
+	docker push $(REPO_PATH):$(TAG)
 
 pushLatest:
 	@echo "推送$(TAG)版本镜像为latest"
-	docker tag sunjunnan112/test-ci:$(TAG) sunjunnan112/test-ci:latest
-	docker push sunjunnan112/test-ci:latest
+	docker tag $(REPO_PATH):$(TAG) $(REPO_PATH):latest
+	docker push $(REPO_PATH):latest
