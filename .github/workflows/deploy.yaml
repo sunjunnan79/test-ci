@@ -31,7 +31,7 @@ jobs:
             echo "Latest tag: $LATEST_TAG"
 
             # 判断当前标签是否 >= 最新标签
-            if [[ "$CURRENT_TAG" == "$LATEST_TAG" || "$(echo -e "$LATEST_TAG\n$CURRENT_TAG" | sort -V | head -n 1)" == "$LATEST_TAG" ]]; then
+             if [ "$CURRENT_TAG" >= "$LATEST_TAG" ]; then
               echo "deploy_latest=true" >> $GITHUB_ENV
             else
               echo "deploy_latest=false" >> $GITHUB_ENV
