@@ -11,8 +11,6 @@ build:
 		--build-arg GOARCH=amd64 \  # 构建 64 位架构的二进制文件
 		--no-cache \  # 禁用缓存，确保每次都重新构建
 		.
-	@echo "构建完成，准备推送镜像"
-	$(MAKE) push
 
 # 推送镜像目标
 push:

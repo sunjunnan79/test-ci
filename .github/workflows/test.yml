@@ -107,14 +107,14 @@ jobs:
       - name: Build and push Docker image
         if: env.should_deploy == 'true'
         run: |
-          TAG=$(git rev-parse --short HEAD)  # 使用 Git 提交短 ID 作为标签
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 获取最新标签（如果没有标签，会为空）
           echo "构建并推送镜像：$(TAG)"
 
           # 构建镜像
-          make TAG=${TAG} build
+          make build TAG=${TAG}
 
           # 推送镜像
-          make push
+          make push TAG=${TAG}
 
       # 推送 `latest` 标签的镜像（只有当前标签 >= 最新标签时才执行推送）
       - name: Push latest Docker image
@@ -122,5 +122,5 @@ jobs:
         run: |
           # 只有最新标签时才推送 `latest`
           echo "推送镜像：latest"
-          make TAG=latest build
-          make push
+          make build TAG=latest
+          make push TAG=${TAG}
