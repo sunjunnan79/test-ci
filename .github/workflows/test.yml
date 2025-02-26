@@ -125,7 +125,7 @@ jobs:
         run: |
           TAG=$(git describe --tags --abbrev=0 2>/dev/null)  # 获取最新标签（如果没有标签，会为空）
           echo "构建并推送镜像：$(TAG)"
-
+          sudo docker login --username=${{ secrets.ALIYUN_DOCKER_USERNAME }} crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com -p ${{ secrets.ALIYUN_DOCKER_PASSWORD }}
           # 推送镜像
           make push TAG=${TAG}
 
