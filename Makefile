@@ -22,3 +22,8 @@ build:
 push:
 	@echo "推送镜像：crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:$(TAG)"
 	docker push crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:$(TAG)
+
+pushLatest:
+	@echo "推送$(TAG)版本镜像为latest"
+	docker tag crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:$(TAG) crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:latest
+	docker push crpi-r1jx5ale23646u4w.cn-hongkong.personal.cr.aliyuncs.com/clairvoyance-project/test-ci:latest

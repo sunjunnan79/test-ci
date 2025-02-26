@@ -128,5 +128,4 @@ jobs:
         run: |
           # 只有最新标签时才推送 `latest`
           echo "推送镜像：latest"
-          make build TAG=latest
-          make push TAG=${TAG}
+          make pushLatest TAG=${TAG}
