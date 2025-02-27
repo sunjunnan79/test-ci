@@ -16,6 +16,15 @@ RUN go mod tidy && go build -o app
 # 第二阶段：构建最终镜像
 FROM alpine:3.17
 
+# 设置工作目录为 /app
+WORKDIR /app
+
+# 将构建的应用从 builder 镜像复制到最终镜像
+COPY --from=builder /app/app .
+
+# 为可执行文件增加最高权限
+RUN chmod 777 ./app
+
 # 安装 tzdata 来设置时区
 RUN apk add --no-cache tzdata
 
@@ -23,8 +32,6 @@ RUN apk add --no-cache tzdata
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone
 
-# 设置工作目录为 /app
-WORKDIR /app
 EXPOSE 8080
 
 # 启动用户服务

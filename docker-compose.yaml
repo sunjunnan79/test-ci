@@ -1,4 +1,12 @@
 services:
+  test-cicd:
+    image: sunjunnan112/test-ci:latest
+    restart: always
+    ports:
+      - '8080:8080'  
+    volumes:
+      - ./configs/:/app/configs
+
   mysql8:
     image: mysql:8.0
     restart: always
@@ -14,8 +22,6 @@ services:
       - ./volume/mysql/data:/var/lib/mysql
       - ./volume/mysql/logs:/var/log/mysql
       - ./script/mysql/:/docker-entrypoint-initdb.d/
-    ports:
-      - "3306:3306"
 
   redis:
     image: 'bitnami/redis:7.2'
@@ -45,3 +51,5 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - TZ=Asia/Shanghai
+
+   
