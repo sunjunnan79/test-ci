@@ -2,7 +2,7 @@
 FROM golang:1.23-alpine AS builder
 
 # 设置 Go 代理为七牛云的代理
-ENV GOPROXY=https://goproxy.cn,direct
+#ENV GOPROXY=https://goproxy.cn,direct
 
 # 切换到 /app 目录
 WORKDIR /app
