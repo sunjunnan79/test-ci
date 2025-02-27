@@ -1,12 +1,4 @@
 services:
-  test-cicd:
-    image: sunjunnan112/test-ci:latest
-    restart: always
-    ports:
-      - '8080:8080'  
-    volumes:
-      - ./configs/:/app/configs
-
   mysql8:
     image: mysql:8.0
     restart: always
