@@ -88,7 +88,7 @@ func setupRouter(config *Config) *gin.Engine {
 	// 连接 MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		config.MySQL.User, config.MySQL.Password, config.MySQL.Host, config.MySQL.Port, config.MySQL.DBName)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{}) // 更新为 GORM 2.x 的方式
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to MySQL:", err)
 	}
